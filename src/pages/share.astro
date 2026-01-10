@@ -4,14 +4,45 @@ import { getMatches } from '../utils/data';
 
 const matches = await getMatches();
 const title = "Telegram Sharing Tool - Roja Directa En Vivo";
+
+// Format the full list for the textarea
+const today = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+let fullListText = `⚽️ *PARTIDOS DE HOY - ${today.toUpperCase()}* ⚽️\n\n`;
+
+matches.forEach(match => {
+    fullListText += `🕒 ${match.time} | ${match.title}\n🔗 https://www.rojadirectaenvivo.live/partido/${match.slug}/\n\n`;
+});
+
+fullListText += `🚀 *Ver todos los partidos aquí:* https://www.rojadirectaenvivo.live/`;
 ---
 
 <Layout title={title} headerTitle="TELEGRAM SHARING TOOL">
     <div class="container">
         <div class="tool-box">
             <div class="tool-header">
-                <h2>Match Link Generator</h2>
-                <p>Select a match to generate a sharing link for Telegram.</p>
+                <h2>Daily Schedule Generator</h2>
+                <p>Generate a complete list of today's matches for Telegram.</p>
+            </div>
+
+            <div class="bulk-section">
+                <div class="bulk-header">
+                    <h3>Full Schedule Text</h3>
+                    <div class="bulk-actions">
+                        <button class="btn-tool copy" onclick="copyBulkText()">Copy Full List</button>
+                        <a 
+                            href={`https://t.me/share/url?url=${encodeURIComponent('https://www.rojadirectaenvivo.live/')}&text=${encodeURIComponent(fullListText)}`} 
+                            target="_blank" 
+                            class="btn-tool telegram"
+                        >
+                            Share Full List
+                        </a>
+                    </div>
+                </div>
+                <textarea id="bulk-text" readonly>{fullListText}</textarea>
+            </div>
+
+            <div class="divider">
+                <span>OR SHARE INDIVIDUAL MATCHES</span>
             </div>
 
             <div class="search-box">
@@ -57,6 +88,7 @@ const title = "Telegram Sharing Tool - Roja Directa En Vivo";
         overflow: hidden;
         color: #333;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        margin-bottom: 4rem;
     }
 
     .tool-header {
@@ -72,9 +104,66 @@ const title = "Telegram Sharing Tool - Roja Directa En Vivo";
         margin-bottom: 0.5rem;
     }
 
+    .bulk-section {
+        padding: 2rem;
+        background: #fdfdfd;
+        border-bottom: 1px solid #eee;
+    }
+
+    .bulk-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .bulk-header h3 {
+        font-size: 1rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .bulk-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    textarea {
+        width: 100%;
+        height: 250px;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 2px solid #eee;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.9rem;
+        background: #f9f9f9;
+        resize: none;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: #d32f2f;
+    }
+
+    .divider {
+        text-align: center;
+        padding: 1rem;
+        background: #f4f4f4;
+        position: relative;
+    }
+
+    .divider span {
+        background: #f4f4f4;
+        padding: 0 1rem;
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: #999;
+    }
+
     .search-box {
         padding: 1.5rem;
-        background: #f4f4f4;
+        background: white;
         border-bottom: 1px solid #eee;
     }
 
@@ -93,7 +182,7 @@ const title = "Telegram Sharing Tool - Roja Directa En Vivo";
     }
 
     .matches-list-tool {
-        max-height: 600px;
+        max-height: 400px;
         overflow-y: auto;
     }
 
@@ -101,7 +190,7 @@ const title = "Telegram Sharing Tool - Roja Directa En Vivo";
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.5rem;
+        padding: 1.25rem 2rem;
         border-bottom: 1px solid #eee;
         transition: background 0.2s;
     }
@@ -152,6 +241,9 @@ const title = "Telegram Sharing Tool - Roja Directa En Vivo";
         border: none;
         transition: transform 0.1s;
         text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .btn-tool:active {
@@ -169,6 +261,14 @@ const title = "Telegram Sharing Tool - Roja Directa En Vivo";
     }
 
     @media (max-width: 768px) {
+        .bulk-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .bulk-actions {
+            width: 100%;
+        }
         .share-item {
             flex-direction: column;
             align-items: flex-start;
@@ -184,6 +284,23 @@ const title = "Telegram Sharing Tool - Roja Directa En Vivo";
 </style>
 
 <script is:inline>
+    function copyBulkText() {
+        const textArea = document.getElementById('bulk-text');
+        textArea.select();
+        document.execCommand('copy');
+        
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = 'Copied!';
+        btn.style.background = '#4caf50';
+        btn.style.color = 'white';
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = '#eee';
+            btn.style.color = '#333';
+        }, 2000);
+    }
+
     function copyToClipboard(btn) {
         const url = btn.getAttribute('data-url');
         navigator.clipboard.writeText(url).then(() => {
