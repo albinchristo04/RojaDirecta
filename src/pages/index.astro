@@ -5,16 +5,17 @@ import { getMatches } from '../utils/data';
 
 const matches = await getMatches();
 
-const title = "Roja Directa En Vivo - Ver Fútbol Gratis Hoy Online";
-const description = "Disfruta de todos los partidos de fútbol en vivo hoy. Roja Directa, Tarjeta Roja, Pirlo TV y más canales para ver fútbol gratis online sin registro.";
+const title = "Roja Directa En Vivo - Fútbol en Vivo Hoy - Roja Directa Fútbol Gratis";
+const description = "Ver fútbol en vivo hoy gratis en Roja Directa En Vivo. La mejor alternativa a Rojadirecta para ver roja directa fútbol gratis y deportes online HD sin cortes.";
+const headerTitle = "ROJA DIRECTA EN VIVO - FÚTBOL EN VIVO HOY";
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} headerTitle={headerTitle}>
 	<div class="container">
         <div class="schedule-box">
             <div class="schedule-header">
                 <span class="globe-icon">🌍</span>
-                TODAY'S LIVE SCHEDULE
+                ROJA DIRECTA FÚTBOL GRATIS - SCHEDULE
             </div>
             <div class="matches-list">
                 {matches.length > 0 ? (
@@ -22,21 +23,33 @@ const description = "Disfruta de todos los partidos de fútbol en vivo hoy. Roja
                         <MatchCard match={match} />
                     ))
                 ) : (
-                    <div class="no-matches">No hay partidos programados en este momento.</div>
+                    <div class="no-matches">No hay partidos de <strong>fútbol en vivo hoy</strong> programados en este momento.</div>
                 )}
             </div>
         </div>
 
         <section class="seo-content">
             <div class="content-box">
-                <h2>Watch Live Football on Tarjeta Roja - The Best Alternative</h2>
+                <div class="seo-header">
+                    <img src="/favicon.svg" alt="Roja Directa En Vivo - Fútbol Gratis" width="50" height="50" />
+                    <h2>Watch Live Football on <strong>Tarjeta Roja</strong> - The Best Alternative</h2>
+                </div>
+                
                 <p>
-                    Welcome to Roja Directa En Vivo, the leading portal for enjoying the best sporting events completely free. 
-                    If you are looking for a reliable alternative to Tarjeta Roja or Pirlo TV, you are in the right place.
+                    Bienvenido a <strong>Roja Directa En Vivo</strong>, el portal líder para disfrutar de <strong>fútbol en vivo hoy</strong> de forma totalmente gratuita. 
+                    Si estás buscando una alternativa confiable a <strong>Rojadirecta</strong> o Pirlo TV para ver <strong>roja directa fútbol gratis</strong>, estás en el lugar correcto.
                 </p>
+                
                 <p>
-                    We offer high-quality streams for all major leagues including LaLiga, Premier League, Champions League, 
-                    and more. Our links are updated in real-time to ensure you never miss a goal.
+                    Ofrecemos transmisiones de alta calidad para todas las ligas principales, incluyendo LaLiga, Premier League, Champions League y más. 
+                    Nuestros enlaces de <strong>roja directa en vivo</strong> se actualizan en tiempo real para asegurar que nunca te pierdas un gol de tu equipo favorito.
+                </p>
+
+                <h3>¿Por qué elegir nuestra plataforma de Roja Directa?</h3>
+                <p>
+                    En el mundo del <strong>fútbol gratis</strong>, la velocidad y la estabilidad son fundamentales. Por eso, nuestra infraestructura está optimizada 
+                    para ofrecerte la mejor experiencia de usuario al buscar <strong>rojadirecta</strong> online. Aquí podrás ver todos los partidos de 
+                    <strong>fútbol en vivo hoy</strong> sin necesidad de registros complicados ni suscripciones costosas.
                 </p>
             </div>
         </section>
@@ -86,14 +99,31 @@ const description = "Disfruta de todos los partidos de fútbol en vivo hoy. Roja
         border-left: 5px solid #d32f2f;
     }
 
+    .seo-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
     .seo-content h2 {
         color: #d32f2f;
-        margin-bottom: 1rem;
+        margin: 0;
         font-size: 1.5rem;
+    }
+
+    .seo-content h3 {
+        color: #d32f2f;
+        margin: 1.5rem 0 1rem;
+        font-size: 1.2rem;
     }
 
     .seo-content p {
         margin-bottom: 1rem;
         line-height: 1.8;
+    }
+
+    .seo-content strong {
+        color: var(--primary);
     }
 </style>
