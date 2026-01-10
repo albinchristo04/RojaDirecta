@@ -10,7 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/sitemap": "^3.1.6",
     "astro": "^4.16.18",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",

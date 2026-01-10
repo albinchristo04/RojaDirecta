@@ -22,12 +22,16 @@ function customSlugify(text: string) {
         .replace(/-+$/, '');
 }
 
+let matchesCache: Match[] | null = null;
+
 export async function getMatches(): Promise<Match[]> {
+    if (matchesCache) return matchesCache;
+
     const response = await fetch('https://raw.githubusercontent.com/albinchristo04/blogger-autopost/refs/heads/main/rojadirecta_events.json');
     const root = await response.json();
     const data = root.events || [];
 
-    return data.map((item: any) => {
+    matchesCache = data.map((item: any) => {
         const title = item.description || 'Partido sin título';
         const league = item.country || 'Varios';
         const slug = customSlugify(title);
@@ -51,6 +55,7 @@ export async function getMatches(): Promise<Match[]> {
             timestamp: matchDate.getTime()
         };
     });
+    return matchesCache;
 }
 
 export function groupMatchesByLeague(matches: Match[]) {

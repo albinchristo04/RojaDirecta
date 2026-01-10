@@ -75,7 +75,7 @@ const allSchemas = [defaultSchema, breadcrumbSchema, ...schema];
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 		{allSchemas.map((s) => (
-			<script type="application/ld+json" set:html={JSON.stringify(s)} />
+			<script type="application/ld+json" set:html={JSON.stringify(s)}></script>
 		))}
 	</head>
 	<body>
