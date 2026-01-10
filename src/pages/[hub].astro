@@ -52,176 +52,97 @@ const filteredMatches = hub.league
 
 const title = getRotatingTitle(hub.title, 'hub');
 const description = `Sigue la ${hub.title} en vivo y en directo. Los mejores enlaces para ver fútbol online gratis sin cortes. Roja Directa, Tarjeta Roja y más.`;
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": `¿Dónde ver ${hub.h1} gratis?`,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": `Puedes ver ${hub.h1} gratis en nuestra web Roja Directa En Vivo, con la mejor calidad de imagen y sonido.`
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Es necesario registrarse?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No, en Roja Directa En Vivo puedes acceder a todos los contenidos de forma gratuita y sin necesidad de crear una cuenta."
-      }
-    }
-  ]
-};
 ---
 
-<Layout title={hub.title} description={description} schema={[faqSchema]}>
-  <section class="hub-hero">
+<Layout title={title} description={description} headerTitle={hub.h1.toUpperCase()}>
     <div class="container">
-      <h1>{hub.h1}</h1>
-      <p>La mejor cobertura de {hub.h1} con enlaces actualizados al minuto.</p>
-    </div>
-  </section>
-
-  <section class="matches-section container">
-    <div class="matches-grid">
-      {filteredMatches.length > 0 ? (
-        filteredMatches.map((match) => (
-          <MatchCard match={match} />
-        ))
-      ) : (
-        <p class="no-matches">No hay partidos programados para esta categoría en este momento.</p>
-      )}
-    </div>
-  </section>
-
-  <article class="hub-content container">
-    <div class="glass content-wrapper">
-      <h2>Guía completa para ver {hub.h1} online</h2>
-      <p>
-        Si eres un apasionado del fútbol y buscas la mejor manera de seguir a tu equipo, has llegado al lugar indicado. 
-        En <strong>Roja Directa En Vivo</strong> nos especializamos en ofrecerte los mejores streams para que no te pierdas 
-        ni un solo detalle de la <strong>{hub.h1}</strong>.
-      </p>
-      
-      <h3>¿Por qué elegir Roja Directa En Vivo?</h3>
-      <p>
-        Nuestra plataforma destaca por su rapidez y sencillez. A diferencia de otros sitios, nosotros priorizamos la 
-        experiencia del usuario, minimizando la publicidad intrusiva y asegurando que los enlaces funcionen correctamente 
-        antes de cada encuentro.
-      </p>
-
-      <h3>Canales disponibles</h3>
-      <p>
-        Contamos con una amplia variedad de canales deportivos, incluyendo:
-      </p>
-      <ul>
-        <li><strong>ESPN En Vivo:</strong> Toda la cobertura de las ligas europeas y americanas.</li>
-        <li><strong>Fox Sports:</strong> Los mejores análisis y partidos en directo.</li>
-        <li><strong>Movistar Deportes:</strong> Exclusividad en eventos de primer nivel.</li>
-        <li><strong>DirecTV Sports:</strong> Cobertura total de torneos internacionales.</li>
-      </ul>
-
-      <h3>Preguntas Frecuentes (FAQ)</h3>
-      <div class="faq-list">
-        <div class="faq-item">
-          <h4>¿Cómo puedo ver los partidos en mi móvil?</h4>
-          <p>Nuestra web es 100% responsive, lo que significa que puedes ver cualquier partido desde tu smartphone o tablet sin necesidad de apps adicionales.</p>
+        <div class="schedule-box">
+            <div class="schedule-header">
+                {hub.h1}
+            </div>
+            <div class="matches-list">
+                {filteredMatches.length > 0 ? (
+                    filteredMatches.map((match) => (
+                        <MatchCard match={match} />
+                    ))
+                ) : (
+                    <div class="no-matches">No hay partidos programados para esta categoría en este momento.</div>
+                )}
+            </div>
         </div>
-        <div class="faq-item">
-          <h4>¿Qué hacer si un enlace se corta?</h4>
-          <p>Siempre ofrecemos múltiples opciones (Opción 1, Opción 2, etc.). Si una falla, simplemente prueba con la siguiente para continuar viendo el juego.</p>
-        </div>
-      </div>
 
-      <p class="long-text">
-        El fútbol es más que un deporte, es una pasión que une a millones de personas. Por eso, nos esforzamos cada día 
-        para que esa pasión llegue a tu pantalla de la forma más fluida posible. Ya sea que sigas la <strong>Champions League</strong>, 
-        <strong>LaLiga</strong> o cualquier otra competición, aquí siempre tendrás un asiento en primera fila.
-      </p>
-      
-      <p class="long-text">
-        Recuerda marcar nuestra página en tus favoritos para acceder rápidamente a los partidos de hoy. Actualizamos 
-        nuestra base de datos cada hora para incluir nuevos encuentros y asegurar que la información sea siempre veraz.
-      </p>
+        <article class="hub-content">
+            <div class="content-box">
+                <h2>Guía completa para ver {hub.h1} online</h2>
+                <p>
+                    Si eres un apasionado del fútbol y buscas la mejor manera de seguir a tu equipo, has llegado al lugar indicado. 
+                    En <strong>Roja Directa En Vivo</strong> nos especializamos en ofrecerte los mejores streams para que no te pierdas 
+                    ni un solo detalle de la <strong>{hub.h1}</strong>.
+                </p>
+                
+                <h3>¿Por qué elegir Roja Directa En Vivo?</h3>
+                <p>
+                    Nuestra plataforma destaca por su rapidez y sencillez. A diferencia de otros sitios, nosotros priorizamos la 
+                    experiencia del usuario, minimizando la publicidad intrusiva y asegurando que los enlaces funcionen correctamente 
+                    antes de cada encuentro.
+                </p>
+            </div>
+        </article>
     </div>
-  </article>
 </Layout>
 
 <style>
-  .hub-hero {
-    padding: 5rem 0;
-    text-align: center;
-    background: linear-gradient(135deg, rgba(255, 62, 62, 0.15) 0%, rgba(15, 17, 21, 0) 100%);
-  }
+    .schedule-box {
+        background: #222;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 2rem;
+        border: 1px solid #333;
+    }
 
-  .hub-hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
+    .schedule-header {
+        background: #1a1a1a;
+        color: #ffc107;
+        padding: 1rem;
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border-bottom: 2px solid #d32f2f;
+    }
 
-  .matches-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem 0;
-  }
+    .matches-list {
+        background: white;
+    }
 
-  .no-matches {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 4rem;
-    color: var(--text-muted);
-    font-style: italic;
-  }
+    .no-matches {
+        padding: 2rem;
+        text-align: center;
+        color: #666;
+        background: white;
+    }
 
-  .hub-content {
-    padding: 4rem 0;
-  }
+    .hub-content {
+        margin-top: 3rem;
+        background: white;
+        color: #333;
+        padding: 2rem;
+        border-radius: 8px;
+        border-left: 5px solid #d32f2f;
+    }
 
-  .content-wrapper {
-    padding: 4rem;
-    border-radius: 32px;
-  }
+    .hub-content h2 {
+        color: #d32f2f;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
 
-  .content-wrapper h2 { margin-bottom: 2rem; }
-  .content-wrapper h3 { margin: 2.5rem 0 1.5rem; }
-  .content-wrapper p { margin-bottom: 1.5rem; color: var(--text-muted); line-height: 1.8; }
-  
-  .content-wrapper ul {
-    margin-bottom: 2rem;
-    padding-left: 1.5rem;
-  }
+    .hub-content h3 {
+        margin: 1.5rem 0 0.5rem;
+        font-size: 1.2rem;
+    }
 
-  .content-wrapper li {
-    margin-bottom: 0.75rem;
-    color: var(--text-muted);
-  }
-
-  .faq-list {
-    margin: 2rem 0;
-  }
-
-  .faq-item {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-  }
-
-  .faq-item h4 {
-    margin-bottom: 0.75rem;
-    color: var(--text-main);
-  }
-
-  .long-text {
-    font-size: 1.05rem;
-  }
-
-  @media (max-width: 768px) {
-    .content-wrapper { padding: 2rem; }
-    .hub-hero h1 { font-size: 2rem; }
-  }
+    .hub-content p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+    }
 </style>

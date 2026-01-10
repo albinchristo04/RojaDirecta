@@ -1,121 +1,99 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MatchCard from '../components/MatchCard.astro';
-import { getMatches, groupMatchesByLeague } from '../utils/data';
+import { getMatches } from '../utils/data';
 
 const matches = await getMatches();
-const groupedMatches = groupMatchesByLeague(matches);
 
 const title = "Roja Directa En Vivo - Ver Fútbol Gratis Hoy Online";
 const description = "Disfruta de todos los partidos de fútbol en vivo hoy. Roja Directa, Tarjeta Roja, Pirlo TV y más canales para ver fútbol gratis online sin registro.";
 ---
 
 <Layout title={title} description={description}>
-	<section class="hero">
-		<div class="container">
-			<h1>Fútbol en Vivo Hoy</h1>
-			<p>Sigue tus equipos favoritos con la mejor calidad de streaming gratis.</p>
-		</div>
-	</section>
+	<div class="container">
+        <div class="schedule-box">
+            <div class="schedule-header">
+                <span class="globe-icon">🌍</span>
+                TODAY'S LIVE SCHEDULE
+            </div>
+            <div class="matches-list">
+                {matches.length > 0 ? (
+                    matches.map((match) => (
+                        <MatchCard match={match} />
+                    ))
+                ) : (
+                    <div class="no-matches">No hay partidos programados en este momento.</div>
+                )}
+            </div>
+        </div>
 
-	<section class="matches-section">
-		<div class="container">
-			{Object.entries(groupedMatches).map(([league, leagueMatches]) => (
-				<div class="league-group">
-					<h2 class="league-title">{league}</h2>
-					<div class="matches-grid">
-						{leagueMatches.map((match) => (
-							<MatchCard match={match} />
-						))}
-					</div>
-				</div>
-			))}
-		</div>
-	</section>
-
-	<section class="seo-content container">
-		<div class="glass content-box">
-			<h2>¿Dónde ver fútbol en vivo hoy gratis?</h2>
-			<p>
-				En <strong>Roja Directa En Vivo</strong> te ofrecemos la mejor recopilación de enlaces para ver fútbol online. 
-				Desde la <strong>Champions League</strong> hasta <strong>LaLiga</strong>, pasando por la Premier League y torneos sudamericanos.
-			</p>
-			<h3>Rojadirecta y Tarjeta Roja</h3>
-			<p>
-				Somos el portal de referencia para los aficionados al deporte rey. Aquí encontrarás canales como ESPN, Fox Sports, 
-				Movistar Deportes y many más, totalmente gratis y en alta definición.
-			</p>
-		</div>
-	</section>
+        <section class="seo-content">
+            <div class="content-box">
+                <h2>Watch Live Football on Tarjeta Roja - The Best Alternative</h2>
+                <p>
+                    Welcome to Roja Directa En Vivo, the leading portal for enjoying the best sporting events completely free. 
+                    If you are looking for a reliable alternative to Tarjeta Roja or Pirlo TV, you are in the right place.
+                </p>
+                <p>
+                    We offer high-quality streams for all major leagues including LaLiga, Premier League, Champions League, 
+                    and more. Our links are updated in real-time to ensure you never miss a goal.
+                </p>
+            </div>
+        </section>
+    </div>
 </Layout>
 
 <style>
-	.hero {
-		padding: 4rem 0;
-		text-align: center;
-		background: linear-gradient(180deg, rgba(255, 62, 62, 0.1) 0%, rgba(15, 17, 21, 0) 100%);
-	}
+    .schedule-box {
+        background: #222;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 2rem;
+        border: 1px solid #333;
+    }
 
-	.hero h1 {
-		font-size: 3.5rem;
-		font-weight: 800;
-		margin-bottom: 1rem;
-		letter-spacing: -1px;
-	}
+    .schedule-header {
+        background: #1a1a1a;
+        color: #ffc107;
+        padding: 1rem;
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border-bottom: 2px solid #d32f2f;
+    }
 
-	.hero p {
-		font-size: 1.25rem;
-		color: var(--text-muted);
-		max-width: 600px;
-		margin: 0 auto;
-	}
+    .globe-icon {
+        margin-right: 0.5rem;
+    }
 
-	.matches-section {
-		padding: 2rem 0;
-	}
+    .matches-list {
+        background: white;
+    }
 
-	.league-title {
-		font-size: 1.5rem;
-		font-weight: 700;
-		margin: 2rem 0 1rem;
-		padding-left: 1rem;
-		border-left: 4px solid var(--primary);
-	}
+    .no-matches {
+        padding: 2rem;
+        text-align: center;
+        color: #666;
+        background: white;
+    }
 
-	.matches-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-		gap: 1.5rem;
-	}
+    .seo-content {
+        margin-top: 3rem;
+        background: white;
+        color: #333;
+        padding: 2rem;
+        border-radius: 8px;
+        border-left: 5px solid #d32f2f;
+    }
 
-	.seo-content {
-		padding: 4rem 0;
-	}
+    .seo-content h2 {
+        color: #d32f2f;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
 
-	.content-box {
-		padding: 3rem;
-		border-radius: 24px;
-	}
-
-	.content-box h2 {
-		margin-bottom: 1.5rem;
-	}
-
-	.content-box h3 {
-		margin: 2rem 0 1rem;
-	}
-
-	.content-box p {
-		margin-bottom: 1rem;
-		color: var(--text-muted);
-	}
-
-	@media (max-width: 768px) {
-		.hero h1 {
-			font-size: 2.5rem;
-		}
-		.matches-grid {
-			grid-template-columns: 1fr;
-		}
-	}
+    .seo-content p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+    }
 </style>

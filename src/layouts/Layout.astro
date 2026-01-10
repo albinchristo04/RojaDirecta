@@ -6,13 +6,15 @@ interface Props {
 	description?: string;
 	canonical?: string;
 	schema?: any[];
+    headerTitle?: string;
 }
 
 const { 
 	title, 
 	description = "Ver fútbol en vivo gratis hoy. Roja Directa TV, Pirlo TV, Tarjeta Roja y más canales deportivos online.",
 	canonical = "https://www.rojadirectaenvivo.live/",
-	schema = []
+	schema = [],
+    headerTitle = "ROJA DIRECTA EN VIVO - FÚTBOL HOY"
 } = Astro.props;
 
 const defaultSchema = {
@@ -79,118 +81,35 @@ const allSchemas = [defaultSchema, breadcrumbSchema, ...schema];
 		))}
 	</head>
 	<body>
-		<header class="glass">
-			<nav class="container">
-				<div class="logo">
-					<a href="/">
-						<span class="text-primary">ROJA</span>DIRECTA<span class="text-primary">ENVIVO</span>
-					</a>
-				</div>
-				<ul class="nav-links">
-					<li><a href="/futbol-hoy/">Fútbol Hoy</a></li>
-					<li><a href="/champions-league/">Champions League</a></li>
-					<li><a href="/laliga/">LaLiga</a></li>
-					<li><a href="/canales-deportivos/">Canales</a></li>
-				</ul>
-			</nav>
+		<header>
+			<div class="container">
+				<h1>{headerTitle}</h1>
+			</div>
 		</header>
+
+        <nav>
+            <div class="container">
+                <a href="/">Inicio</a>
+                <a href="/futbol-hoy/">Fútbol Hoy</a>
+                <a href="/champions-league/">Champions League</a>
+                <a href="/laliga/">LaLiga</a>
+                <a href="/canales-deportivos/">Canales</a>
+            </div>
+        </nav>
 
 		<main>
 			<slot />
 		</main>
 
-		<footer class="glass mt-4">
+		<footer>
 			<div class="container">
-				<div class="footer-grid">
-					<div class="footer-brand">
-						<h3>Roja Directa En Vivo</h3>
-						<p>La mejor plataforma para ver fútbol online gratis.</p>
-					</div>
-					<div class="footer-links">
-						<h4>Enlaces Rápidos</h4>
-						<ul>
-							<li><a href="/rojadirecta/">Roja Directa</a></li>
-							<li><a href="/rojadirectaenvivo/">Roja Directa En Vivo</a></li>
-							<li><a href="/futbol-en-vivo/">Fútbol en Vivo</a></li>
-							<li><a href="/ver-futbol-gratis/">Ver Fútbol Gratis</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="footer-bottom">
-					<p>&copy; {new Date().getFullYear()} RojaDirectaEnvivo.live - Todos los derechos reservados.</p>
-				</div>
+				<p>&copy; {new Date().getFullYear()} RojaDirectaEnvivo.live - Todos los derechos reservados.</p>
+                <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+                    <a href="/rojadirecta/">Roja Directa</a>
+                    <a href="/rojadirectaenvivo/">Roja Directa En Vivo</a>
+                    <a href="/futbol-en-vivo/">Fútbol en Vivo</a>
+                </div>
 			</div>
 		</footer>
-
-		<style>
-			header {
-				position: sticky;
-				top: 0;
-				z-index: 100;
-				padding: 1rem 0;
-				border-bottom: 1px solid var(--border);
-			}
-			nav {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-			.logo a {
-				font-size: 1.5rem;
-				font-weight: 800;
-				letter-spacing: -0.5px;
-			}
-			.nav-links {
-				display: flex;
-				gap: 2rem;
-			}
-			.nav-links a {
-				font-weight: 600;
-				font-size: 0.9rem;
-				transition: color 0.2s;
-			}
-			.nav-links a:hover {
-				color: var(--primary);
-			}
-			main {
-				min-height: 80vh;
-			}
-			footer {
-				padding: 4rem 0 2rem;
-				border-top: 1px solid var(--border);
-			}
-			.footer-grid {
-				display: grid;
-				grid-template-columns: 2fr 1fr;
-				gap: 4rem;
-				margin-bottom: 3rem;
-			}
-			.footer-brand h3 {
-				margin-bottom: 1rem;
-			}
-			.footer-links h4 {
-				margin-bottom: 1rem;
-			}
-			.footer-links ul li {
-				margin-bottom: 0.5rem;
-			}
-			.footer-bottom {
-				text-align: center;
-				padding-top: 2rem;
-				border-top: 1px solid var(--border);
-				font-size: 0.8rem;
-				color: var(--text-muted);
-			}
-
-			@media (max-width: 768px) {
-				.nav-links {
-					display: none;
-				}
-				.footer-grid {
-					grid-template-columns: 1fr;
-					gap: 2rem;
-				}
-			}
-		</style>
 	</body>
 </html>

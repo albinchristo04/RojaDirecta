@@ -21,94 +21,76 @@ export async function getStaticPaths() {
 
 const { channel } = Astro.props;
 const matches = await getMatches();
-// Filter matches that might be on this channel (heuristic: all matches for now, or filter by name if available)
-const channelMatches = matches.slice(0, 10); // Show some matches as relevant content
+const channelMatches = matches.slice(0, 10);
 
 const title = getRotatingTitle(`Canal ${channel.name} En Vivo Gratis`, 'hub');
 const description = `Sigue la señal del canal ${channel.name} en vivo gratis. Disfruta de toda la programación deportiva de ${channel.name} online en Roja Directa En Vivo.`;
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": `¿Cómo ver ${channel.name} en vivo gratis?`,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": `Puedes ver el canal ${channel.name} en vivo a través de nuestra plataforma, donde seleccionamos los mejores streams disponibles.`
-      }
-    }
-  ]
-};
 ---
 
-<Layout title={title} description={description} schema={[faqSchema]}>
-  <section class="channel-hero">
+<Layout title={title} description={description} headerTitle={`VER CANAL ${channel.name.toUpperCase()} EN VIVO`}>
     <div class="container">
-      <h1>Ver Canal {channel.name} En Vivo</h1>
-      <p>La mejor programación de {channel.name} disponible las 24 horas gratis.</p>
-    </div>
-  </section>
+        <div class="schedule-box">
+            <div class="schedule-header">
+                PARTIDOS TRANSMITIDOS POR {channel.name.toUpperCase()}
+            </div>
+            <div class="matches-list">
+                {channelMatches.map((match) => (
+                    <MatchCard match={match} />
+                ))}
+            </div>
+        </div>
 
-  <section class="matches-section container">
-    <h2>Partidos transmitidos por {channel.name}</h2>
-    <div class="matches-grid">
-      {channelMatches.map((match) => (
-        <MatchCard match={match} />
-      ))}
+        <article class="channel-content">
+            <div class="content-box">
+                <h2>Sobre el canal {channel.name}</h2>
+                <p>
+                    El canal <strong>{channel.name}</strong> es uno de los líderes mundiales en transmisiones deportivas. 
+                    Con derechos exclusivos para las ligas más importantes del mundo, es la opción preferida de millones de fans.
+                </p>
+            </div>
+        </article>
     </div>
-  </section>
-
-  <article class="channel-content container">
-    <div class="glass content-box">
-      <h2>Sobre el canal {channel.name}</h2>
-      <p>
-        El canal <strong>{channel.name}</strong> es uno de los líderes mundiales en transmisiones deportivas. 
-        Con derechos exclusivos para las ligas más importantes del mundo, es la opción preferida de millones de fans.
-      </p>
-      <h3>Programación Destacada</h3>
-      <p>
-        Desde análisis profundos hasta transmisiones en directo de la <strong>Champions League</strong>, 
-        <strong>LaLiga</strong> y la <strong>Copa Libertadores</strong>, {channel.name} lo tiene todo.
-      </p>
-      <p>
-        En nuestra web, te facilitamos el acceso a esta señal para que no dependas de una suscripción de cable 
-        tradicional. Disfruta de {channel.name} en cualquier lugar y momento.
-      </p>
-    </div>
-  </article>
 </Layout>
 
 <style>
-  .channel-hero {
-    padding: 4rem 0;
-    text-align: center;
-    background: linear-gradient(180deg, rgba(34, 197, 94, 0.1) 0%, rgba(15, 17, 21, 0) 100%);
-  }
+    .schedule-box {
+        background: #222;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 2rem;
+        border: 1px solid #333;
+    }
 
-  .channel-hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
+    .schedule-header {
+        background: #1a1a1a;
+        color: #ffc107;
+        padding: 1rem;
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border-bottom: 2px solid #d32f2f;
+    }
 
-  .matches-section h2 {
-    margin: 2rem 0;
-    font-size: 1.5rem;
-  }
+    .matches-list {
+        background: white;
+    }
 
-  .matches-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-  }
+    .channel-content {
+        margin-top: 3rem;
+        background: white;
+        color: #333;
+        padding: 2rem;
+        border-radius: 8px;
+        border-left: 5px solid #d32f2f;
+    }
 
-  .channel-content {
-    padding: 4rem 0;
-  }
+    .channel-content h2 {
+        color: #d32f2f;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
 
-  .content-box {
-    padding: 3rem;
-    border-radius: 24px;
-  }
+    .channel-content p {
+        line-height: 1.8;
+    }
 </style>

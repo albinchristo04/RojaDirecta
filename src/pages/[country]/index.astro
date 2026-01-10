@@ -27,75 +27,90 @@ const title = getRotatingTitle(`Roja Directa En Vivo ${country.name}`, 'hub');
 const description = `Ver fútbol en vivo en ${country.name} hoy. Disfruta de todos los partidos de ${country.keyword} y ligas internacionales gratis en Roja Directa En Vivo.`;
 ---
 
-<Layout title={title} description={description}>
-  <section class="country-hero">
+<Layout title={title} description={description} headerTitle={`FÚTBOL EN VIVO ${country.name.toUpperCase()}`}>
     <div class="container">
-      <h1>Fútbol en Vivo {country.name}</h1>
-      <p>Sigue los mejores partidos de {country.keyword} y el mundo desde {country.name}.</p>
-    </div>
-  </section>
-
-  <section class="matches-section container">
-    {Object.entries(groupedMatches).map(([league, leagueMatches]) => (
-      <div class="league-group">
-        <h2 class="league-title">{league}</h2>
-        <div class="matches-grid">
-          {leagueMatches.map((match) => (
-            <MatchCard match={match} />
-          ))}
+        <div class="schedule-box">
+            <div class="schedule-header">
+                PARTIDOS EN VIVO EN {country.name.toUpperCase()}
+            </div>
+            <div class="matches-list">
+                {Object.entries(groupedMatches).map(([league, leagueMatches]) => (
+                    <div class="league-section">
+                        <div class="league-name">{league}</div>
+                        {leagueMatches.map((match) => (
+                            <MatchCard match={match} />
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>
-      </div>
-    ))}
-  </section>
 
-  <section class="seo-content container">
-    <div class="glass content-box">
-      <h2>¿Cómo ver fútbol gratis en {country.name}?</h2>
-      <p>
-        En {country.name}, la pasión por el fútbol se vive intensamente. Por eso, en <strong>Roja Directa En Vivo</strong> 
-        hemos optimizado nuestra plataforma para que los aficionados de {country.name} puedan disfrutar de sus equipos 
-        favoritos con la mejor latencia y calidad de imagen.
-      </p>
-      <p>
-        Ya sea que quieras ver la liga local de {country.name} o las grandes competiciones europeas, aquí encontrarás 
-        enlaces seguros y actualizados.
-      </p>
+        <section class="seo-content">
+            <div class="content-box">
+                <h2>¿Cómo ver fútbol gratis en {country.name}?</h2>
+                <p>
+                    En {country.name}, la pasión por el fútbol se vive intensamente. Por eso, en <strong>Roja Directa En Vivo</strong> 
+                    hemos optimizado nuestra plataforma para que los aficionados de {country.name} puedan disfrutar de sus equipos 
+                    favoritos con la mejor latencia y calidad de imagen.
+                </p>
+            </div>
+        </section>
     </div>
-  </section>
 </Layout>
 
 <style>
-  .country-hero {
-    padding: 4rem 0;
-    text-align: center;
-    background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(15, 17, 21, 0) 100%);
-  }
+    .schedule-box {
+        background: #222;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 2rem;
+        border: 1px solid #333;
+    }
 
-  .country-hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
+    .schedule-header {
+        background: #1a1a1a;
+        color: #ffc107;
+        padding: 1rem;
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border-bottom: 2px solid #d32f2f;
+    }
 
-  .league-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 2rem 0 1rem;
-    padding-left: 1rem;
-    border-left: 4px solid var(--accent);
-  }
+    .matches-list {
+        background: white;
+    }
 
-  .matches-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-  }
+    .league-section {
+        border-bottom: 2px solid #eee;
+    }
 
-  .seo-content {
-    padding: 4rem 0;
-  }
+    .league-name {
+        background: #f4f4f4;
+        color: #333;
+        padding: 0.5rem 1rem;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
 
-  .content-box {
-    padding: 3rem;
-    border-radius: 24px;
-  }
+    .seo-content {
+        margin-top: 3rem;
+        background: white;
+        color: #333;
+        padding: 2rem;
+        border-radius: 8px;
+        border-left: 5px solid #d32f2f;
+    }
+
+    .seo-content h2 {
+        color: #d32f2f;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .seo-content p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+    }
 </style>

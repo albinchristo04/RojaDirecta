@@ -11,361 +11,223 @@ export async function getStaticPaths() {
   }));
 }
 
-const { match, allMatches } = Astro.props;
+const { match } = Astro.props;
 
 const title = getRotatingTitle(match.title, 'match');
 const description = `Ver ${match.title} en vivo gratis hoy. Sigue el partido de ${match.league} online con los mejores canales de streaming en Roja Directa En Vivo.`;
 
-const sportsEventSchema = {
-  "@context": "https://schema.org",
-  "@type": "SportsEvent",
-  "name": match.title,
-  "description": description,
-  "startDate": new Date(match.timestamp).toISOString(),
-  "location": {
-    "@type": "Place",
-    "name": "Estadio"
-  },
-  "competitor": [
-    {
-      "@type": "SportsTeam",
-      "name": match.title.split(' vs ')[0]
-    },
-    {
-      "@type": "SportsTeam",
-      "name": match.title.split(' vs ')[1]
-    }
-  ]
-};
-
-const broadcastSchema = {
-  "@context": "https://schema.org",
-  "@type": "BroadcastEvent",
-  "name": match.title,
-  "isLiveBroadcast": match.isLive,
-  "startDate": new Date(match.timestamp).toISOString(),
-  "videoFormat": "HD"
-};
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": `¿Cómo ver ${match.title} en vivo gratis?`,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": `Puedes ver ${match.title} en vivo gratis a través de nuestra plataforma Roja Directa En Vivo, donde recopilamos los mejores enlaces de streaming.`
-      }
-    },
-    {
-      "@type": "Question",
-      "name": `¿A qué hora juega ${match.title}?`,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": `El partido ${match.title} comienza a las ${match.time} hora local.`
-      }
-    }
-  ]
-};
-
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Inicio",
-      "item": "https://www.rojadirectaenvivo.live/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": match.league,
-      "item": `https://www.rojadirectaenvivo.live/liga/${match.league.toLowerCase().replace(/\s+/g, '-')}/`
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": match.title,
-      "item": `https://www.rojadirectaenvivo.live/partido/${match.slug}/`
-    }
-  ]
-};
-
-const relatedMatches = allMatches
-  .filter(m => m.slug !== match.slug && m.league === match.league)
-  .slice(0, 5);
-
-const shareUrl = `https://www.rojadirectaenvivo.live/partido/${match.slug}/`;
-const shareText = `Ver ${match.title} en vivo gratis hoy en Roja Directa!`;
+const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url : '';
 ---
 
 <Layout 
   title={title} 
-  description={description} 
-  schema={[sportsEventSchema, broadcastSchema, faqSchema, breadcrumbSchema]}
+  description={description}
+  headerTitle={`WATCH ${match.title.toUpperCase()} LIVE`}
 >
-  <div class="match-page container">
-    <nav class="breadcrumb">
-      <a href="/">Inicio</a> / <span>{match.league}</span> / <span>{match.title}</span>
-    </nav>
-
-    <div class="match-header glass">
-      <div class="league-badge">{match.league}</div>
-      <h1>{match.title}</h1>
-      <div class="match-meta">
-        <span class="time">{match.time}</span>
-        {match.isLive && <span class="live-indicator">EN VIVO</span>}
-      </div>
-
-      <div class="share-buttons">
-        <a href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`} target="_blank" class="share-btn telegram">
-          Telegram
-        </a>
-        <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`} target="_blank" class="share-btn whatsapp">
-          WhatsApp
-        </a>
-      </div>
-    </div>
-
-    <div class="match-content-grid">
-      <div class="player-section">
-        <div class="glass player-placeholder">
-          <div class="player-info">
-            <h2>Transmisión en Vivo</h2>
-            <p>La señal se activará 30 minutos antes del encuentro.</p>
-            <div class="channel-list">
-              {match.channels.map((channel, index) => (
-                <a href={channel.url} target="_blank" class="channel-link">
-                  Opción {index + 1}: {channel.name}
-                </a>
-              ))}
+  <div class="container">
+    <div class="player-container">
+        <div class="player-header">
+            <span class="live-dot"></span>
+            LIVE: {match.title}
+        </div>
+        
+        <div class="player-wrapper">
+            <div class="unmute-overlay" id="unmute-btn">
+                CLICK UNMUTE STREAM
             </div>
-          </div>
+            {initialStream ? (
+                <iframe 
+                    id="main-player"
+                    src={initialStream} 
+                    frameborder="0" 
+                    allowfullscreen 
+                    scrolling="no"
+                ></iframe>
+            ) : (
+                <div class="no-stream">No stream available for this match yet.</div>
+            )}
         </div>
 
-        <div class="match-description glass">
-          <h2>Previa del Partido: {match.title}</h2>
-          <p>
-            No te pierdas el emocionante encuentro entre <strong>{match.title}</strong> correspondiente a la <strong>{match.league}</strong>. 
-            Este partido promete ser uno de los más destacados de la jornada, con ambos equipos buscando la victoria para escalar posiciones en la tabla.
-          </p>
-          <p>
-            En <strong>Roja Directa En Vivo</strong>, te ofrecemos múltiples opciones de streaming para que no te pierdas ni un segundo de la acción. 
-            Nuestros enlaces son actualizados constantemente para garantizar la mejor calidad y estabilidad durante la transmisión.
-          </p>
-          
-          <h3>¿Cómo ver {match.title} online?</h3>
-          <p>
-            Para ver el partido, simplemente selecciona una de las opciones de arriba. Recomendamos tener una conexión a internet estable 
-            para disfrutar de la señal en HD sin interrupciones.
-          </p>
-        </div>
-      </div>
-
-      <aside class="sidebar">
-        <div class="glass sidebar-box">
-          <h3>Partidos Relacionados</h3>
-          <div class="related-list">
-            {relatedMatches.map(m => (
-              <a href={`/partido/${m.slug}/`} class="related-item">
-                <span class="r-time">{m.time}</span>
-                <span class="r-title">{m.title}</span>
-              </a>
+        <div class="channel-selector">
+            {match.channels.map((channel, index) => (
+                <button 
+                    class={`channel-btn ${index === 0 ? 'active' : ''}`}
+                    data-url={channel.decoded_url}
+                >
+                    {channel.name || `Channel ${index + 1}`}
+                </button>
             ))}
-          </div>
         </div>
-
-        <div class="glass sidebar-box mt-4">
-          <h3>Enlaces de Interés</h3>
-          <ul class="quick-links">
-            <li><a href="/futbol-hoy/">Fútbol Hoy</a></li>
-            <li><a href="/champions-league/">Champions League</a></li>
-            <li><a href="/laliga/">LaLiga</a></li>
-            <li><a href="/canales-deportivos/">Canales TV</a></li>
-          </ul>
-        </div>
-      </aside>
     </div>
+
+    <section class="match-info">
+        <div class="glass content-box">
+            <h2>About this match: {match.title}</h2>
+            <p>
+                You are watching <strong>{match.title}</strong> live stream. This event is part of <strong>{match.league}</strong>. 
+                Our platform provides the best quality links for free sports streaming.
+            </p>
+            <p>
+                If the current channel is not working, please try the alternative options provided below the player. 
+                We recommend a stable internet connection for the best experience.
+            </p>
+        </div>
+    </section>
   </div>
 </Layout>
 
 <style>
-  .match-page {
-    padding: 2rem 0;
-  }
-
-  .breadcrumb {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-
-  .match-header {
-    padding: 3rem;
-    text-align: center;
-    border-radius: 24px;
-    margin-bottom: 2rem;
-  }
-
-  .league-badge {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--primary);
-  }
-
-  .match-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .match-meta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .time {
-    font-size: 1.5rem;
-    font-weight: 800;
-  }
-
-  .live-indicator {
-    background: var(--primary);
-    padding: 2px 10px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 800;
-  }
-
-  .share-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .share-btn {
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    transition: opacity 0.2s;
-  }
-
-  .telegram { background: #0088cc; color: white; }
-  .whatsapp { background: #25d366; color: white; }
-  .share-btn:hover { opacity: 0.9; }
-
-  .match-content-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-  }
-
-  .player-placeholder {
-    aspect-ratio: 16/9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 24px;
-    margin-bottom: 2rem;
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .channel-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .channel-link {
-    background: var(--primary);
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-
-  .match-description {
-    padding: 2.5rem;
-    border-radius: 24px;
-  }
-
-  .match-description h2, .match-description h3 {
-    margin-bottom: 1rem;
-  }
-
-  .match-description p {
-    margin-bottom: 1.5rem;
-    color: var(--text-muted);
-  }
-
-  .sidebar-box {
-    padding: 1.5rem;
-    border-radius: 16px;
-  }
-
-  .sidebar-box h3 {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .related-item {
-    display: flex;
-    gap: 1rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .related-item:last-child { border-bottom: none; }
-
-  .r-time {
-    font-weight: 700;
-    color: var(--primary);
-    font-size: 0.85rem;
-  }
-
-  .r-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-
-  .quick-links li {
-    margin-bottom: 0.75rem;
-  }
-
-  .quick-links a {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    transition: color 0.2s;
-  }
-
-  .quick-links a:hover { color: var(--primary); }
-
-  @media (max-width: 992px) {
-    .match-content-grid {
-      grid-template-columns: 1fr;
+    .player-container {
+        margin-top: 2rem;
+        background: #111;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #333;
     }
-  }
 
-  @media (max-width: 768px) {
-    .match-header h1 {
-      font-size: 1.8rem;
+    .player-header {
+        background: #222;
+        color: #ffc107;
+        padding: 1rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-bottom: 1px solid #333;
     }
-  }
+
+    .live-dot {
+        width: 12px;
+        height: 12px;
+        background: #d32f2f;
+        border-radius: 50%;
+        display: inline-block;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+
+    .player-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        background: #000;
+    }
+
+    .player-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .unmute-overlay {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 16px;
+        border: 1px solid white;
+        font-weight: 700;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+
+    .no-stream {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+    }
+
+    .channel-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: #1a1a1a;
+        justify-content: center;
+    }
+
+    .channel-btn {
+        background: #d32f2f;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: 700;
+        cursor: pointer;
+        min-width: 120px;
+        transition: background 0.2s;
+    }
+
+    .channel-btn:hover {
+        background: #b71c1c;
+    }
+
+    .channel-btn.active {
+        background: #ffc107;
+        color: black;
+    }
+
+    .match-info {
+        margin-top: 3rem;
+    }
+
+    .content-box {
+        padding: 2rem;
+        border-radius: 8px;
+        background: white;
+        color: #333;
+        border-left: 5px solid #d32f2f;
+    }
+
+    .content-box h2 {
+        margin-bottom: 1rem;
+        color: #d32f2f;
+    }
+
+    .content-box p {
+        color: #666;
+        margin-bottom: 1rem;
+    }
 </style>
+
+<script>
+    const player = document.getElementById('main-player');
+    const buttons = document.querySelectorAll('.channel-btn');
+    const unmuteBtn = document.getElementById('unmute-btn');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const url = btn.getAttribute('data-url');
+            if (player && url) {
+                player.src = url;
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        });
+    });
+
+    if (unmuteBtn) {
+        unmuteBtn.addEventListener('click', () => {
+            unmuteBtn.style.display = 'none';
+        });
+        // Auto hide after 10 seconds if not clicked
+        setTimeout(() => {
+            unmuteBtn.style.display = 'none';
+        }, 10000);
+    }
+</script>

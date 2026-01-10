@@ -2,7 +2,7 @@ export interface Match {
     title: string;
     time: string;
     league: string;
-    channels: { name: string; url: string }[];
+    channels: { name: string; url: string; decoded_url: string }[];
     id: string;
     slug: string;
     isLive: boolean;
@@ -49,7 +49,11 @@ export async function getMatches(): Promise<Match[]> {
             title,
             time: item.time.substring(0, 5),
             league,
-            channels: item.channels || [],
+            channels: (item.channels || []).map((c: any) => ({
+                name: c.name,
+                url: c.url,
+                decoded_url: c.decoded_url
+            })),
             slug,
             isLive,
             timestamp: matchDate.getTime()
