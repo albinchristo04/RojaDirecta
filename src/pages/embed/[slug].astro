@@ -1,0 +1,171 @@
+---
+import { getMatches } from '../../utils/data';
+
+export async function getStaticPaths() {
+  const matches = await getMatches();
+  return matches.map((match) => ({
+    params: { slug: match.slug },
+    props: { match },
+  }));
+}
+
+const { match } = Astro.props;
+const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url : '';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{match.title} - Embed</title>
+    <meta name="robots" content="noindex">
+    <script src="https://pl28447342.effectivegatecpm.com/e1/59/ad/e159ad5d97bb49342ffbf8f6afde48eb.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .player-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-wrapper {
+            position: relative;
+            flex-grow: 1;
+            background: #000;
+        }
+
+        .player-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .channel-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+            background: #111;
+            justify-content: center;
+            border-top: 1px solid #333;
+        }
+
+        .channel-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 3px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .channel-btn:hover {
+            background: #b71c1c;
+        }
+
+        .channel-btn.active {
+            background: #ffc107;
+            color: black;
+        }
+
+        .unmute-overlay {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border: 1px solid white;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .no-stream {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="player-wrapper">
+            <div class="unmute-overlay" id="unmute-btn">
+                CLICK UNMUTE STREAM
+            </div>
+            {initialStream ? (
+                <iframe 
+                    id="main-player"
+                    src={initialStream} 
+                    frameborder="0" 
+                    allowfullscreen 
+                    scrolling="no"
+                ></iframe>
+            ) : (
+                <div class="no-stream">No stream available for this match yet.</div>
+            )}
+        </div>
+
+        {match.channels.length > 1 && (
+            <div class="channel-selector">
+                {match.channels.map((channel, index) => (
+                    <button 
+                        class={`channel-btn ${index === 0 ? 'active' : ''}`}
+                        data-url={channel.decoded_url}
+                    >
+                        {channel.name || `CH ${index + 1}`}
+                    </button>
+                ))}
+            </div>
+        )}
+    </div>
+
+    <script>
+        const player = document.getElementById('main-player');
+        const buttons = document.querySelectorAll('.channel-btn');
+        const unmuteBtn = document.getElementById('unmute-btn');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const url = btn.getAttribute('data-url');
+                if (player && url) {
+                    player.src = url;
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+            });
+        });
+
+        if (unmuteBtn) {
+            unmuteBtn.addEventListener('click', () => {
+                unmuteBtn.style.display = 'none';
+            });
+            setTimeout(() => {
+                unmuteBtn.style.display = 'none';
+            }, 10000);
+        }
+    </script>
+</body>
+</html>

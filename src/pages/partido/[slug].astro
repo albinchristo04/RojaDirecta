@@ -76,6 +76,14 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
                 WhatsApp
             </a>
         </div>
+
+        <div class="embed-section">
+            <div class="embed-header">
+                <span>EMBED THIS MATCH:</span>
+                <button id="copy-embed" class="copy-btn">Copy Code</button>
+            </div>
+            <textarea id="embed-code" readonly>{`<iframe src="https://www.rojadirectaenvivo.live/embed/${match.slug}/" width="100%" height="500px" frameborder="0" allowfullscreen scrolling="no"></iframe>`}</textarea>
+        </div>
     </div>
 
     <section class="match-info">
@@ -259,6 +267,56 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
         background: #25d366;
     }
 
+    .embed-section {
+        padding: 1.5rem;
+        background: #1a1a1a;
+        border-top: 1px solid #333;
+    }
+
+    .embed-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .embed-header span {
+        font-weight: 800;
+        font-size: 0.8rem;
+        color: #ffc107;
+    }
+
+    .copy-btn {
+        background: #333;
+        color: white;
+        border: 1px solid #444;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+        background: #444;
+        border-color: #ffc107;
+    }
+
+    #embed-code {
+        width: 100%;
+        height: 60px;
+        background: #000;
+        color: #888;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 0.75rem;
+        resize: none;
+        outline: none;
+    }
+
     @media (max-width: 600px) {
         .share-container {
             flex-direction: column;
@@ -295,5 +353,19 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
         setTimeout(() => {
             unmuteBtn.style.display = 'none';
         }, 10000);
+    }
+
+    const copyBtn = document.getElementById('copy-embed');
+    const embedTextarea = document.getElementById('embed-code') as HTMLTextAreaElement;
+
+    if (copyBtn && embedTextarea) {
+        copyBtn.addEventListener('click', () => {
+            embedTextarea.select();
+            document.execCommand('copy');
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyBtn.textContent = 'Copy Code';
+            }, 2000);
+        });
     }
 </script>
