@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://www.rojadirectaenvivo.live/sitemap-index.xml
