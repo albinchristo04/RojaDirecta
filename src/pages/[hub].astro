@@ -1,0 +1,227 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MatchCard from '../components/MatchCard.astro';
+import { getMatches } from '../utils/data';
+import { getRotatingTitle } from '../utils/seo';
+
+export async function getStaticPaths() {
+  const hubs = [
+    { 
+      slug: 'futbol-hoy', 
+      title: 'Fútbol Hoy En Vivo - Partidos de Hoy Gratis Online',
+      h1: 'Ver Fútbol Hoy En Vivo Gratis',
+      league: null 
+    },
+    { 
+      slug: 'champions-league', 
+      title: 'Champions League En Vivo - Ver Liga de Campeones Gratis',
+      h1: 'Champions League En Vivo Hoy',
+      league: 'Champions League' 
+    },
+    { 
+      slug: 'laliga', 
+      title: 'LaLiga En Vivo - Ver Fútbol Español Gratis Online',
+      h1: 'LaLiga EA Sports En Vivo',
+      league: 'LaLiga' 
+    },
+    { 
+      slug: 'premier-league', 
+      title: 'Premier League En Vivo - Ver Fútbol Inglés Gratis',
+      h1: 'Premier League En Vivo Hoy',
+      league: 'Premier League' 
+    },
+    { 
+      slug: 'canales-deportivos', 
+      title: 'Canales Deportivos En Vivo - ESPN, Fox Sports, Movistar',
+      h1: 'Canales de Deportes En Vivo Gratis',
+      league: null 
+    }
+  ];
+
+  return hubs.map((hub) => ({
+    params: { hub: hub.slug },
+    props: { hub },
+  }));
+}
+
+const { hub } = Astro.props;
+const matches = await getMatches();
+const filteredMatches = hub.league 
+  ? matches.filter(m => m.league && m.league.toLowerCase().includes(hub.league.toLowerCase()))
+  : matches;
+
+const title = getRotatingTitle(hub.title, 'hub');
+const description = `Sigue la ${hub.title} en vivo y en directo. Los mejores enlaces para ver fútbol online gratis sin cortes. Roja Directa, Tarjeta Roja y más.`;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": `¿Dónde ver ${hub.h1} gratis?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Puedes ver ${hub.h1} gratis en nuestra web Roja Directa En Vivo, con la mejor calidad de imagen y sonido.`
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Es necesario registrarse?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, en Roja Directa En Vivo puedes acceder a todos los contenidos de forma gratuita y sin necesidad de crear una cuenta."
+      }
+    }
+  ]
+};
+---
+
+<Layout title={hub.title} description={description} schema={[faqSchema]}>
+  <section class="hub-hero">
+    <div class="container">
+      <h1>{hub.h1}</h1>
+      <p>La mejor cobertura de {hub.h1} con enlaces actualizados al minuto.</p>
+    </div>
+  </section>
+
+  <section class="matches-section container">
+    <div class="matches-grid">
+      {filteredMatches.length > 0 ? (
+        filteredMatches.map((match) => (
+          <MatchCard match={match} />
+        ))
+      ) : (
+        <p class="no-matches">No hay partidos programados para esta categoría en este momento.</p>
+      )}
+    </div>
+  </section>
+
+  <article class="hub-content container">
+    <div class="glass content-wrapper">
+      <h2>Guía completa para ver {hub.h1} online</h2>
+      <p>
+        Si eres un apasionado del fútbol y buscas la mejor manera de seguir a tu equipo, has llegado al lugar indicado. 
+        En <strong>Roja Directa En Vivo</strong> nos especializamos en ofrecerte los mejores streams para que no te pierdas 
+        ni un solo detalle de la <strong>{hub.h1}</strong>.
+      </p>
+      
+      <h3>¿Por qué elegir Roja Directa En Vivo?</h3>
+      <p>
+        Nuestra plataforma destaca por su rapidez y sencillez. A diferencia de otros sitios, nosotros priorizamos la 
+        experiencia del usuario, minimizando la publicidad intrusiva y asegurando que los enlaces funcionen correctamente 
+        antes de cada encuentro.
+      </p>
+
+      <h3>Canales disponibles</h3>
+      <p>
+        Contamos con una amplia variedad de canales deportivos, incluyendo:
+      </p>
+      <ul>
+        <li><strong>ESPN En Vivo:</strong> Toda la cobertura de las ligas europeas y americanas.</li>
+        <li><strong>Fox Sports:</strong> Los mejores análisis y partidos en directo.</li>
+        <li><strong>Movistar Deportes:</strong> Exclusividad en eventos de primer nivel.</li>
+        <li><strong>DirecTV Sports:</strong> Cobertura total de torneos internacionales.</li>
+      </ul>
+
+      <h3>Preguntas Frecuentes (FAQ)</h3>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>¿Cómo puedo ver los partidos en mi móvil?</h4>
+          <p>Nuestra web es 100% responsive, lo que significa que puedes ver cualquier partido desde tu smartphone o tablet sin necesidad de apps adicionales.</p>
+        </div>
+        <div class="faq-item">
+          <h4>¿Qué hacer si un enlace se corta?</h4>
+          <p>Siempre ofrecemos múltiples opciones (Opción 1, Opción 2, etc.). Si una falla, simplemente prueba con la siguiente para continuar viendo el juego.</p>
+        </div>
+      </div>
+
+      <p class="long-text">
+        El fútbol es más que un deporte, es una pasión que une a millones de personas. Por eso, nos esforzamos cada día 
+        para que esa pasión llegue a tu pantalla de la forma más fluida posible. Ya sea que sigas la <strong>Champions League</strong>, 
+        <strong>LaLiga</strong> o cualquier otra competición, aquí siempre tendrás un asiento en primera fila.
+      </p>
+      
+      <p class="long-text">
+        Recuerda marcar nuestra página en tus favoritos para acceder rápidamente a los partidos de hoy. Actualizamos 
+        nuestra base de datos cada hora para incluir nuevos encuentros y asegurar que la información sea siempre veraz.
+      </p>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .hub-hero {
+    padding: 5rem 0;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255, 62, 62, 0.15) 0%, rgba(15, 17, 21, 0) 100%);
+  }
+
+  .hub-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+  }
+
+  .no-matches {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .hub-content {
+    padding: 4rem 0;
+  }
+
+  .content-wrapper {
+    padding: 4rem;
+    border-radius: 32px;
+  }
+
+  .content-wrapper h2 { margin-bottom: 2rem; }
+  .content-wrapper h3 { margin: 2.5rem 0 1.5rem; }
+  .content-wrapper p { margin-bottom: 1.5rem; color: var(--text-muted); line-height: 1.8; }
+  
+  .content-wrapper ul {
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+  }
+
+  .content-wrapper li {
+    margin-bottom: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .faq-list {
+    margin: 2rem 0;
+  }
+
+  .faq-item {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+  }
+
+  .faq-item h4 {
+    margin-bottom: 0.75rem;
+    color: var(--text-main);
+  }
+
+  .long-text {
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 768px) {
+    .content-wrapper { padding: 2rem; }
+    .hub-hero h1 { font-size: 2rem; }
+  }
+</style>

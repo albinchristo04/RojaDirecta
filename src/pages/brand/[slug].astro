@@ -1,0 +1,172 @@
+import Layout from '../../layouts/Layout.astro';
+import { getRotatingTitle } from '../../utils/seo';
+
+export async function getStaticPaths() {
+  const brands = [
+    { 
+      slug: 'rojadirecta', 
+      title: 'Roja Directa - El Portal Original de Fútbol en Vivo',
+      h1: 'Roja Directa: Ver Fútbol Online Gratis'
+    },
+    { 
+      slug: 'rojadirectaenvivo', 
+      title: 'Roja Directa En Vivo - Streaming de Deportes Hoy',
+      h1: 'Roja Directa En Vivo: Tu Deporte Favorito'
+    },
+    { 
+      slug: 'futbol-en-vivo', 
+      title: 'Fútbol en Vivo - Todos los Partidos de Hoy Gratis',
+      h1: 'Fútbol en Vivo y en Directo'
+    },
+    { 
+      slug: 'ver-futbol-gratis', 
+      title: 'Ver Fútbol Gratis - Mejores Páginas de Streaming 2026',
+      h1: 'Cómo Ver Fútbol Gratis Online'
+    }
+  ];
+
+  return brands.map((brand) => ({
+    params: { slug: brand.slug },
+    props: { brand },
+  }));
+}
+
+const { brand } = Astro.props;
+const title = getRotatingTitle(brand.title, 'brand');
+const description = `Todo sobre ${brand.h1}. La guía definitiva para ver deportes online sin pagar suscripciones.`;
+---
+
+<Layout title={brand.title} description={description}>
+  <article class="brand-page container">
+    <div class="glass brand-content">
+      <h1>{brand.h1}</h1>
+      <p class="intro">
+        Bienvenido a la autoridad máxima en <strong>{brand.slug}</strong>. Si estás buscando la mejor manera de 
+        disfrutar del deporte rey sin complicaciones, has llegado al sitio correcto.
+      </p>
+
+      <section class="brand-section">
+        <h2>Historia y Evolución</h2>
+        <p>
+          Desde sus inicios, el concepto de <strong>{brand.slug}</strong> ha revolucionado la forma en que los aficionados 
+          consumen contenido deportivo. Lo que comenzó como una simple necesidad de ver partidos que no se transmitían 
+          en televisión abierta, se ha convertido en un ecosistema global de streaming.
+        </p>
+      </section>
+
+      <section class="brand-section">
+        <h2>¿Por qué somos la mejor opción?</h2>
+        <p>
+          Nuestra infraestructura está diseñada para soportar picos de tráfico masivos durante eventos como el 
+          <strong>Clásico</strong> o la final de la <strong>Champions League</strong>. No solo ofrecemos enlaces, 
+          ofrecemos una comunidad y una experiencia fluida.
+        </p>
+        <ul>
+          <li>Calidad HD garantizada.</li>
+          <li>Sin registros obligatorios.</li>
+          <li>Compatible con todos los dispositivos.</li>
+          <li>Actualización en tiempo real.</li>
+        </ul>
+      </section>
+
+      <section class="brand-section">
+        <h2>Seguridad y Confianza</h2>
+        <p>
+          Entendemos que la seguridad es primordial. Por eso, todos nuestros enlaces externos son verificados 
+          periódicamente para asegurar que no contengan malware ni publicidad excesivamente intrusiva.
+        </p>
+      </section>
+
+      <div class="cta-box">
+        <h3>¿Listo para ver el partido?</h3>
+        <p>Vuelve a nuestra página de inicio para ver la lista completa de encuentros de hoy.</p>
+        <a href="/" class="btn-primary">Ver Partidos de Hoy</a>
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .brand-page {
+    padding: 4rem 0;
+  }
+
+  .brand-content {
+    padding: 4rem;
+    border-radius: 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .brand-content h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .intro {
+    font-size: 1.25rem;
+    color: var(--text-main);
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .brand-section {
+    margin-bottom: 3rem;
+  }
+
+  .brand-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+    color: var(--primary);
+  }
+
+  .brand-section p {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .brand-section ul {
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .brand-section li {
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+  }
+
+  .cta-box {
+    margin-top: 4rem;
+    padding: 3rem;
+    background: rgba(255, 62, 62, 0.1);
+    border-radius: 24px;
+    text-align: center;
+    border: 1px solid var(--primary);
+  }
+
+  .cta-box h3 {
+    margin-bottom: 1rem;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    transition: transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .brand-content { padding: 2rem; }
+    .brand-content h1 { font-size: 2rem; }
+  }
+</style>

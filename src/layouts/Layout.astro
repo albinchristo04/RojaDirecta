@@ -1,0 +1,196 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	canonical?: string;
+	schema?: any[];
+}
+
+const { 
+	title, 
+	description = "Ver fútbol en vivo gratis hoy. Roja Directa TV, Pirlo TV, Tarjeta Roja y más canales deportivos online.",
+	canonical = "https://www.rojadirectaenvivo.live/",
+	schema = []
+} = Astro.props;
+
+const defaultSchema = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	"name": "Roja Directa En Vivo",
+	"url": "https://www.rojadirectaenvivo.live/",
+	"potentialAction": {
+		"@type": "SearchAction",
+		"target": "https://www.rojadirectaenvivo.live/search?q={search_term_string}",
+		"query-input": "required name=search_term_string"
+	}
+};
+
+const breadcrumbSchema = {
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [
+		{
+			"@type": "ListItem",
+			"position": 1,
+			"name": "Inicio",
+			"item": "https://www.rojadirectaenvivo.live/"
+		}
+	]
+};
+
+const allSchemas = [defaultSchema, breadcrumbSchema, ...schema];
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="https://www.rojadirectaenvivo.live/og-image.jpg" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={canonical} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content="https://www.rojadirectaenvivo.live/og-image.jpg" />
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+		{allSchemas.map((s) => (
+			<script type="application/ld+json" set:html={JSON.stringify(s)} />
+		))}
+	</head>
+	<body>
+		<header class="glass">
+			<nav class="container">
+				<div class="logo">
+					<a href="/">
+						<span class="text-primary">ROJA</span>DIRECTA<span class="text-primary">ENVIVO</span>
+					</a>
+				</div>
+				<ul class="nav-links">
+					<li><a href="/futbol-hoy/">Fútbol Hoy</a></li>
+					<li><a href="/champions-league/">Champions League</a></li>
+					<li><a href="/laliga/">LaLiga</a></li>
+					<li><a href="/canales-deportivos/">Canales</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main>
+			<slot />
+		</main>
+
+		<footer class="glass mt-4">
+			<div class="container">
+				<div class="footer-grid">
+					<div class="footer-brand">
+						<h3>Roja Directa En Vivo</h3>
+						<p>La mejor plataforma para ver fútbol online gratis.</p>
+					</div>
+					<div class="footer-links">
+						<h4>Enlaces Rápidos</h4>
+						<ul>
+							<li><a href="/rojadirecta/">Roja Directa</a></li>
+							<li><a href="/rojadirectaenvivo/">Roja Directa En Vivo</a></li>
+							<li><a href="/futbol-en-vivo/">Fútbol en Vivo</a></li>
+							<li><a href="/ver-futbol-gratis/">Ver Fútbol Gratis</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer-bottom">
+					<p>&copy; {new Date().getFullYear()} RojaDirectaEnvivo.live - Todos los derechos reservados.</p>
+				</div>
+			</div>
+		</footer>
+
+		<style>
+			header {
+				position: sticky;
+				top: 0;
+				z-index: 100;
+				padding: 1rem 0;
+				border-bottom: 1px solid var(--border);
+			}
+			nav {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.logo a {
+				font-size: 1.5rem;
+				font-weight: 800;
+				letter-spacing: -0.5px;
+			}
+			.nav-links {
+				display: flex;
+				gap: 2rem;
+			}
+			.nav-links a {
+				font-weight: 600;
+				font-size: 0.9rem;
+				transition: color 0.2s;
+			}
+			.nav-links a:hover {
+				color: var(--primary);
+			}
+			main {
+				min-height: 80vh;
+			}
+			footer {
+				padding: 4rem 0 2rem;
+				border-top: 1px solid var(--border);
+			}
+			.footer-grid {
+				display: grid;
+				grid-template-columns: 2fr 1fr;
+				gap: 4rem;
+				margin-bottom: 3rem;
+			}
+			.footer-brand h3 {
+				margin-bottom: 1rem;
+			}
+			.footer-links h4 {
+				margin-bottom: 1rem;
+			}
+			.footer-links ul li {
+				margin-bottom: 0.5rem;
+			}
+			.footer-bottom {
+				text-align: center;
+				padding-top: 2rem;
+				border-top: 1px solid var(--border);
+				font-size: 0.8rem;
+				color: var(--text-muted);
+			}
+
+			@media (max-width: 768px) {
+				.nav-links {
+					display: none;
+				}
+				.footer-grid {
+					grid-template-columns: 1fr;
+					gap: 2rem;
+				}
+			}
+		</style>
+	</body>
+</html>

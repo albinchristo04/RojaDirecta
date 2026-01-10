@@ -1,0 +1,100 @@
+import Layout from '../../layouts/Layout.astro';
+import MatchCard from '../../components/MatchCard.astro';
+import { getMatches, groupMatchesByLeague } from '../../utils/data';
+import { getRotatingTitle } from '../../utils/seo';
+
+export async function getStaticPaths() {
+  const countries = [
+    { code: 'es', name: 'España', keyword: 'fútbol español' },
+    { code: 'mx', name: 'México', keyword: 'fútbol mexicano' },
+    { code: 'ar', name: 'Argentina', keyword: 'fútbol argentino' },
+    { code: 'co', name: 'Colombia', keyword: 'fútbol colombiano' },
+    { code: 'pe', name: 'Perú', keyword: 'fútbol peruano' }
+  ];
+
+  return countries.map((country) => ({
+    params: { country: country.code },
+    props: { country },
+  }));
+}
+
+const { country } = Astro.props;
+const matches = await getMatches();
+const groupedMatches = groupMatchesByLeague(matches);
+
+const title = getRotatingTitle(`Roja Directa En Vivo ${country.name}`, 'hub');
+const description = `Ver fútbol en vivo en ${country.name} hoy. Disfruta de todos los partidos de ${country.keyword} y ligas internacionales gratis en Roja Directa En Vivo.`;
+---
+
+<Layout title={title} description={description}>
+  <section class="country-hero">
+    <div class="container">
+      <h1>Fútbol en Vivo {country.name}</h1>
+      <p>Sigue los mejores partidos de {country.keyword} y el mundo desde {country.name}.</p>
+    </div>
+  </section>
+
+  <section class="matches-section container">
+    {Object.entries(groupedMatches).map(([league, leagueMatches]) => (
+      <div class="league-group">
+        <h2 class="league-title">{league}</h2>
+        <div class="matches-grid">
+          {leagueMatches.map((match) => (
+            <MatchCard match={match} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="seo-content container">
+    <div class="glass content-box">
+      <h2>¿Cómo ver fútbol gratis en {country.name}?</h2>
+      <p>
+        En {country.name}, la pasión por el fútbol se vive intensamente. Por eso, en <strong>Roja Directa En Vivo</strong> 
+        hemos optimizado nuestra plataforma para que los aficionados de {country.name} puedan disfrutar de sus equipos 
+        favoritos con la mejor latencia y calidad de imagen.
+      </p>
+      <p>
+        Ya sea que quieras ver la liga local de {country.name} o las grandes competiciones europeas, aquí encontrarás 
+        enlaces seguros y actualizados.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .country-hero {
+    padding: 4rem 0;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(15, 17, 21, 0) 100%);
+  }
+
+  .country-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .league-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 2rem 0 1rem;
+    padding-left: 1rem;
+    border-left: 4px solid var(--accent);
+  }
+
+  .matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .seo-content {
+    padding: 4rem 0;
+  }
+
+  .content-box {
+    padding: 3rem;
+    border-radius: 24px;
+  }
+</style>

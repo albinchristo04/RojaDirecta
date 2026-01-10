@@ -1,0 +1,103 @@
+---
+import type { Match } from '../utils/data';
+
+interface Props {
+	match: Match;
+}
+
+const { match } = Astro.props;
+---
+
+<a href={`/partido/${match.slug}/`} class="match-card fade-in">
+	<div class="match-info">
+		<span class="match-time">{match.time}</span>
+		<span class="match-league">{match.league}</span>
+	</div>
+	<div class="match-teams">
+		<h3>{match.title}</h3>
+	</div>
+	<div class="match-status">
+		{match.isLive ? (
+			<span class="live-badge">EN VIVO</span>
+		) : (
+			<span class="upcoming-badge">PRÓXIMAMENTE</span>
+		)}
+	</div>
+</a>
+
+<style>
+	.match-card {
+		display: block;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 1.25rem;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		margin-bottom: 1rem;
+	}
+
+	.match-card:hover {
+		transform: translateY(-4px);
+		border-color: var(--primary);
+		background: var(--bg-card-hover);
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+	}
+
+	.match-info {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0.75rem;
+		font-size: 0.85rem;
+	}
+
+	.match-time {
+		font-weight: 700;
+		color: var(--text-main);
+		background: rgba(255, 255, 255, 0.05);
+		padding: 2px 8px;
+		border-radius: 4px;
+	}
+
+	.match-league {
+		color: var(--text-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	.match-teams h3 {
+		font-size: 1.1rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+	}
+
+	.match-status {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.live-badge {
+		background: var(--primary);
+		color: white;
+		font-size: 0.7rem;
+		font-weight: 800;
+		padding: 4px 10px;
+		border-radius: 20px;
+		animation: pulse 2s infinite;
+	}
+
+	.upcoming-badge {
+		background: rgba(255, 255, 255, 0.1);
+		color: var(--text-muted);
+		font-size: 0.7rem;
+		font-weight: 700;
+		padding: 4px 10px;
+		border-radius: 20px;
+	}
+
+	@keyframes pulse {
+		0% { opacity: 1; }
+		50% { opacity: 0.6; }
+		100% { opacity: 1; }
+	}
+</style>
