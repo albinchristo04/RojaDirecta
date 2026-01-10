@@ -1,0 +1,220 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getMatches } from '../utils/data';
+
+const matches = await getMatches();
+const title = "Telegram Sharing Tool - Roja Directa En Vivo";
+---
+
+<Layout title={title} headerTitle="TELEGRAM SHARING TOOL">
+    <div class="container">
+        <div class="tool-box">
+            <div class="tool-header">
+                <h2>Match Link Generator</h2>
+                <p>Select a match to generate a sharing link for Telegram.</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="match-search" placeholder="Search match or league..." />
+            </div>
+
+            <div class="matches-list-tool">
+                {matches.map((match) => (
+                    <div class="share-item" data-title={match.title.toLowerCase()} data-league={match.league.toLowerCase()}>
+                        <div class="share-info">
+                            <span class="s-time">{match.time}</span>
+                            <span class="s-league">{match.league}</span>
+                            <h3 class="s-title">{match.title}</h3>
+                        </div>
+                        <div class="share-actions">
+                            <button 
+                                class="btn-tool copy" 
+                                data-url={`https://www.rojadirectaenvivo.live/partido/${match.slug}/`}
+                                onclick="copyToClipboard(this)"
+                            >
+                                Copy Link
+                            </button>
+                            <a 
+                                href={`https://t.me/share/url?url=${encodeURIComponent(`https://www.rojadirectaenvivo.live/partido/${match.slug}/`)}&text=${encodeURIComponent(`⚽️ VER EN VIVO: ${match.title}\n\nDisfruta del partido gratis aquí 👇`)}`} 
+                                target="_blank" 
+                                class="btn-tool telegram"
+                            >
+                                Share Telegram
+                            </a>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .tool-box {
+        margin-top: 2rem;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        color: #333;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .tool-header {
+        background: #1a1a1a;
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        border-bottom: 4px solid #d32f2f;
+    }
+
+    .tool-header h2 {
+        color: #ffc107;
+        margin-bottom: 0.5rem;
+    }
+
+    .search-box {
+        padding: 1.5rem;
+        background: #f4f4f4;
+        border-bottom: 1px solid #eee;
+    }
+
+    #match-search {
+        width: 100%;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: 2px solid #ddd;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    #match-search:focus {
+        border-color: #d32f2f;
+    }
+
+    .matches-list-tool {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .share-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid #eee;
+        transition: background 0.2s;
+    }
+
+    .share-item:hover {
+        background: #fafafa;
+    }
+
+    .share-info {
+        flex: 1;
+    }
+
+    .s-time {
+        display: inline-block;
+        background: #333;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .s-league {
+        font-size: 0.75rem;
+        color: #d32f2f;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-left: 0.5rem;
+    }
+
+    .s-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    .share-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn-tool {
+        padding: 10px 16px;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.1s;
+        text-align: center;
+    }
+
+    .btn-tool:active {
+        transform: scale(0.95);
+    }
+
+    .copy {
+        background: #eee;
+        color: #333;
+    }
+
+    .telegram {
+        background: #0088cc;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .share-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .share-actions {
+            width: 100%;
+        }
+        .btn-tool {
+            flex: 1;
+        }
+    }
+</style>
+
+<script is:inline>
+    function copyToClipboard(btn) {
+        const url = btn.getAttribute('data-url');
+        navigator.clipboard.writeText(url).then(() => {
+            const originalText = btn.innerText;
+            btn.innerText = 'Copied!';
+            btn.style.background = '#4caf50';
+            btn.style.color = 'white';
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = '#eee';
+                btn.style.color = '#333';
+            }, 2000);
+        });
+    }
+
+    // Search functionality
+    const searchInput = document.getElementById('match-search');
+    const items = document.querySelectorAll('.share-item');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            items.forEach(item => {
+                const title = item.getAttribute('data-title');
+                const league = item.getAttribute('data-league');
+                if (title.includes(term) || league.includes(term)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+</script>
