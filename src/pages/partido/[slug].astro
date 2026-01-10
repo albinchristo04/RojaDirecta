@@ -58,6 +58,24 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
                 </button>
             ))}
         </div>
+
+        <div class="share-container">
+            <span>COMPARTIR:</span>
+            <a 
+                href={`https://t.me/share/url?url=${encodeURIComponent(`https://www.rojadirectaenvivo.live/partido/${match.slug}/`)}&text=${encodeURIComponent(`⚽️ VER EN VIVO: ${match.title}\n\nDisfruta del partido gratis aquí 👇`)}`} 
+                target="_blank" 
+                class="share-btn telegram"
+            >
+                Telegram
+            </a>
+            <a 
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`⚽️ VER EN VIVO: ${match.title}\n\nDisfruta del partido gratis aquí 👇\nhttps://www.rojadirectaenvivo.live/partido/${match.slug}/`)}`} 
+                target="_blank" 
+                class="share-btn whatsapp"
+            >
+                WhatsApp
+            </a>
+        </div>
     </div>
 
     <section class="match-info">
@@ -202,6 +220,54 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
     .content-box p {
         color: #666;
         margin-bottom: 1rem;
+    }
+
+    .share-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: #111;
+        border-top: 1px solid #333;
+    }
+
+    .share-container span {
+        font-weight: 800;
+        font-size: 0.8rem;
+        color: #ffc107;
+    }
+
+    .share-btn {
+        padding: 8px 20px;
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: white;
+        transition: transform 0.1s;
+    }
+
+    .share-btn:active {
+        transform: scale(0.95);
+    }
+
+    .telegram {
+        background: #0088cc;
+    }
+
+    .whatsapp {
+        background: #25d366;
+    }
+
+    @media (max-width: 600px) {
+        .share-container {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .share-btn {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>
 
