@@ -27,12 +27,11 @@ jobs:
       - name: Build
         run: npx astro build
 
+      - name: Check dist
+        run: ls -R dist
+
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=rojadirecta-envivo
+        run: npx wrangler pages deploy dist --project-name=rojadirecta-envivo --api-token=${{ secrets.CLOUDFLARE_API_TOKEN }} --account-id=${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Ping Google Sitemap
         run: |
