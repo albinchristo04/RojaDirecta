@@ -28,10 +28,24 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
     <div id="container-56c436d985de560b2b365e820e0834f8" style="margin: 1rem 0; display: flex; justify-content: center;"></div>
     <div class="player-container">
 
+        <div class="vpn-notice">
+            <div class="vpn-text">
+                <span>🚀 Si el reproductor no carga, usa <strong>VPN 1.1.1.1</strong> (Gratis):</span>
+                <div class="vpn-links">
+                    <a href="https://apps.apple.com/app/1-1-1-1-faster-internet/id1423534716" target="_blank" class="vpn-btn ios">iOS</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.cloudflare.onedotonedotonedotone" target="_blank" class="vpn-btn android">Android</a>
+                </div>
+            </div>
+            <div class="support-link">
+                💬 Ayuda: <a href="https://t.me/+Bwu-lRqQQzQ3Yjhl" target="_blank">Grupo de Telegram</a>
+            </div>
+        </div>
+
         <div class="player-header">
             <span class="live-dot"></span>
             LIVE: {match.title}
         </div>
+
         
         <div class="player-wrapper">
             <div class="unmute-overlay" id="unmute-btn">
@@ -140,7 +154,54 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
         border: 1px solid #333;
     }
 
+    .vpn-notice {
+        background: #1a1a1a;
+        padding: 1rem;
+        border-bottom: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: center;
+    }
+
+    .vpn-text {
+        font-size: 0.9rem;
+        color: #eee;
+    }
+
+    .vpn-links {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        justify-content: center;
+    }
+
+    .vpn-btn {
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: white;
+    }
+
+    .ios { background: #007aff; }
+    .android { background: #3ddc84; color: #000; }
+
+    .support-link {
+        font-size: 0.85rem;
+        color: #ffc107;
+    }
+
+    .support-link a {
+        color: #ffc107;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
     .player-header {
+
         background: #222;
         color: #ffc107;
         padding: 1rem;
