@@ -25,6 +25,20 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
   headerTitle={`WATCH ${match.title.toUpperCase()} LIVE`}
 >
   <div class="container">
+    <!-- Pre-player Banner Ad -->
+    <div class="container" style="text-align: center; margin: 1rem 0;">
+        <script>
+          atOptions = {
+            'key' : '0669cb9f720396db47ff6c5c8e8b7a9e',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/0669cb9f720396db47ff6c5c8e8b7a9e/invoke.js"></script>
+    </div>
+    
     <div class="player-container">
 
         <div class="vpn-notice">
@@ -74,6 +88,20 @@ const initialStream = match.channels.length > 0 ? match.channels[0].decoded_url 
                     {channel.name || `Channel ${index + 1}`}
                 </button>
             ))}
+        </div>
+
+        <!-- Post-player Banner Ad -->
+        <div class="container" style="text-align: center; margin: 1rem 0;">
+            <script>
+              atOptions = {
+                'key' : '0669cb9f720396db47ff6c5c8e8b7a9e',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/0669cb9f720396db47ff6c5c8e8b7a9e/invoke.js"></script>
         </div>
 
         <div class="share-container">
